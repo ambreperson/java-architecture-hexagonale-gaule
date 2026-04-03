@@ -1,5 +1,8 @@
 package gaule.village.javanoramix.domain.druide;
 
+import gaule.village.javanoramix.domain.barde.Barde;
+import gaule.village.javanoramix.domain.druide.cuiseur.CuiseurNonPréchaufféException;
+import gaule.village.javanoramix.domain.shared.Niveau;
 import gaule.village.javanoramix.domain.druide.cuiseur.AppareilDeCuisson;
 import gaule.village.javanoramix.domain.druide.stock.IngrédientManquantException;
 import gaule.village.javanoramix.domain.druide.stock.Stock;
@@ -9,34 +12,42 @@ public class Javanoramix implements Druide {
 
     private final Stock stock;
     private final AppareilDeCuisson cuiseur;
+    private final Barde barde;
 
-    public Javanoramix(Stock stock, AppareilDeCuisson cuiseur) {
+    public Javanoramix(Stock stock, AppareilDeCuisson cuiseur, Barde barde) {
         this.stock = stock;
         this.cuiseur = cuiseur;
+        this.barde = barde;
     }
 
     @Override
     public Plat préparer(Recette recetteÀPréparer) {
-        System.out.printf("Préparation de la recette : %s\n", recetteÀPréparer.nom());
+        try {
+            System.out.printf("Préparation de la recette : %s\n", recetteÀPréparer.nom());
 
-        vérifierDisponibilitéIngrédients(recetteÀPréparer);
+            vérifierDisponibilitéIngrédients(recetteÀPréparer);
 
-        préchauffer(recetteÀPréparer);
+            préchauffer(recetteÀPréparer);
 
-        Ingrédient dernierIngrédientObtenu = Ingrédient.INGRÉDIENT_VIDE;
-        for (Étape étape : recetteÀPréparer.déroulé()) {
-            System.out.printf("Étape : %s\n", étape.nom());
-            if (étape.action() == Action.MELANGER) {
-                dernierIngrédientObtenu = mélanger(étape);
+            Ingrédient dernierIngrédientObtenu = Ingrédient.INGRÉDIENT_VIDE;
+            for (Étape étape : recetteÀPréparer.déroulé()) {
+                System.out.printf("Étape : %s\n", étape.nom());
+                if (étape.action() == Action.MELANGER) {
+                    dernierIngrédientObtenu = mélanger(étape);
+                }
+                if (étape.action() == Action.BOUILLIR) {
+                    dernierIngrédientObtenu = bouillir(étape);
+                }
+                stock.stockerIngrédient(dernierIngrédientObtenu);
+                System.out.printf("Réservation de %s\n", dernierIngrédientObtenu.toString());
             }
-            if (étape.action() == Action.BOUILLIR) {
-                dernierIngrédientObtenu = bouillir(étape);
-            }
-            stock.stockerIngrédient(dernierIngrédientObtenu);
-            System.out.printf("Réservation de %s\n", dernierIngrédientObtenu.toString());
+
+            alerterSiIlManqueDesIngrédientsPourLaProchaineFois(recetteÀPréparer);
+            return servir(dernierIngrédientObtenu);
+        } catch (IngrédientManquantException | CuiseurNonPréchaufféException e) {
+            barde.chanter("Je ne peux pas préparer la %s !".formatted(recetteÀPréparer.nom().toLowerCase()), Niveau.URGENT);
+            throw e;
         }
-
-        return servir(dernierIngrédientObtenu);
     }
 
     private void vérifierDisponibilitéIngrédients(Recette recetteÀPréparer) {
@@ -84,10 +95,19 @@ public class Javanoramix implements Druide {
         return cuiseur.prélever();
     }
 
+    private void alerterSiIlManqueDesIngrédientsPourLaProchaineFois(Recette recetteÀPréparer) {
+        try {
+            vérifierDisponibilitéIngrédients(recetteÀPréparer);
+        } catch (IngrédientManquantException e) {
+            barde.chanter("Il manque des ingrédients pour la prochaine fois !", Niveau.IMPORTANT);
+        }
+    }
+
     private Plat servir(Ingrédient ingrédient) {
         var ingrédientÀServir = this.stock.récupérerIngrédient(ingrédient).orElseThrow();
         var plat = new Plat(ingrédientÀServir.nom(), ingrédientÀServir.quantité());
         System.out.printf("Le plat %s est prêt !\n", plat);
+        barde.chanter("Le plat %s est prêt !".formatted(plat.nom()), Niveau.NORMAL);
         return plat;
     }
 }

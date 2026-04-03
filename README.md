@@ -203,3 +203,36 @@ Si vous voulez contribuer, n'hésitez pas ! Mais attention :
 ---
 
 **Fait avec la fraîcheur de Lutèce par Ordralfabétix, poissonnier et développeur Java du village gaulois**
+
+## L'Exercice du Barde — Assurancetourix s'en mêle !
+
+*"Tais-toi, Assurancetourix !" - Tout le village*
+
+Bien. Le gestionnaire de potions fonctionne. Panoramix retrouve ses recettes. Le village est sauvé.
+
+Mais voilà qu'Assurancetourix, le barde du village, réclame sa place dans l'application.
+Et pour une fois, il a raison.
+
+### L'objectif
+
+Intégrer un domaine `barde/` et le brancher sur le domaine `druide/` existant **sans toucher au cœur du domaine druide**.
+Comme quand on prépare une nouvelle sauce sans changer la recette du poisson — c'est tout l'art de l'architecture hexagonale !
+
+**Implémenter les règles métier du Druide**
+
+- Lorsque la potion est préparée, le duide doit informer le village avec un niveau `NORMAL`
+- Si le duide n'a pas réussi à préparer la potion, il doit informer le village avec un niveau `URGENT`
+- Si à la fin de la préparation, il manque des ingrédients, il doit informer le village avec un niveau `IMPORTANT`
+
+**Implémenter les règles métier du Barde**
+
+Dans `Assurancetourix` (le service domaine), respecter ces règles :
+
+- `NORMAL` → message diffusé tel quel
+- `IMPORTANT` → message en majuscules, précédé de `"⚠️ ATTENTION, BRAVES GAULOIS : "`, répété deux fois
+- `URGENT` → message en majuscules, répété trois fois, séparé par `" ! "`
+
+Exemple pour `URGENT` :
+```
+"les romains arrivent"
+→ "LES ROMAINS ARRIVENT ! LES ROMAINS ARRIVENT ! LES ROMAINS ARRIVENT !"
