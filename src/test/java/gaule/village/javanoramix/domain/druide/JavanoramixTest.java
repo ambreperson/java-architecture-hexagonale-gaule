@@ -1,8 +1,10 @@
 package gaule.village.javanoramix.domain.druide;
 
 import gaule.village.javanoramix.domain.adapter.CuiseurDouble;
+import gaule.village.javanoramix.domain.adapter.NotifierSpy;
 import gaule.village.javanoramix.domain.adapter.StockDouble;
 import gaule.village.javanoramix.domain.druide.cuiseur.AppareilDeCuisson;
+import gaule.village.javanoramix.domain.druide.notif.Notificateur;
 import gaule.village.javanoramix.domain.druide.stock.IngrédientManquantException;
 import gaule.village.javanoramix.domain.druide.stock.Stock;
 import gaule.village.javanoramix.domain.recette.*;
@@ -179,7 +181,10 @@ public class JavanoramixTest {
             ))
         );
         AppareilDeCuisson cuiseur = new CuiseurDouble();
-        Druide javanoramix = new Javanoramix(stock, cuiseur);
+
+        NotifierSpy notificateur = new NotifierSpy();
+
+        Druide javanoramix = new Javanoramix(stock, cuiseur, notificateur);
 
         Plat platAttendu = new Plat("fraifle", 20);
 
@@ -189,6 +194,7 @@ public class JavanoramixTest {
         // Assert
         assertEquals(platAttendu, platObtenu);
         assertEquals(0, stock.getContenu().size());
+        assertEquals(1, notificateur.count);
     }
 
     @Test

@@ -1,5 +1,6 @@
 package gaule.village.javanoramix.infrastructure;
 
+import gaule.village.javanoramix.domain.druide.cuiseur.AppareilDeCuisson;
 import gaule.village.javanoramix.domain.druide.cuiseur.CuiseurNonPréchaufféException;
 import gaule.village.javanoramix.domain.recette.Ingrédient;
 import gaule.village.javanoramix.domain.recette.Température;

@@ -1,5 +1,6 @@
 package gaule.village.javanoramix.infrastructure;
 
+import gaule.village.javanoramix.domain.druide.stock.Stock;
 import gaule.village.javanoramix.domain.recette.Ingrédient;
 import org.springframework.stereotype.Repository;
 
