@@ -1,8 +1,11 @@
 package gaule.village.javanoramix.config;
 
+import gaule.village.javanoramix.domain.barde.Assurancetourix;
+import gaule.village.javanoramix.domain.barde.Barde;
 import gaule.village.javanoramix.domain.druide.Druide;
 import gaule.village.javanoramix.domain.druide.Javanoramix;
 import gaule.village.javanoramix.domain.druide.cuiseur.AppareilDeCuisson;
+import gaule.village.javanoramix.domain.druide.notif.Notificateur;
 import gaule.village.javanoramix.domain.druide.stock.Stock;
 import gaule.village.javanoramix.domain.recette.Ingrédient;
 import gaule.village.javanoramix.infrastructure.GardeManger;
@@ -15,8 +18,8 @@ import java.util.List;
 @Configuration
 public class JavanoramixConfiguration {
     @Bean
-    Druide druide(Stock stock, AppareilDeCuisson appareilDeCuisson) {
-        return new Javanoramix(stock, appareilDeCuisson);
+    Druide druide(Stock stock, AppareilDeCuisson appareilDeCuisson, Notificateur notificateur) {
+        return new Javanoramix(stock, appareilDeCuisson, notificateur);
     }
 
     @Bean
@@ -30,5 +33,10 @@ public class JavanoramixConfiguration {
                         new Ingrédient("feuille de gui coupée à la serpe d'or", 1)
                 ));
         return new GardeManger(contenu);
+    }
+
+    @Bean
+    Barde assurancetourix() {
+        return new Assurancetourix();
     }
 }

@@ -179,7 +179,8 @@ public class JavanoramixTest {
             ))
         );
         AppareilDeCuisson cuiseur = new CuiseurDouble();
-        Druide javanoramix = new Javanoramix(stock, cuiseur);
+        NotificateurSpy notificateur = new NotificateurSpy();
+        Druide javanoramix = new Javanoramix(stock, cuiseur, notificateur);
 
         Plat platAttendu = new Plat("fraifle", 20);
 
@@ -198,7 +199,7 @@ public class JavanoramixTest {
                 new ArrayList<>(List.of(new Ingrédient("fraise", 12)))
         );
         AppareilDeCuisson cuiseur = new CuiseurDouble();
-        Druide javanoramix = new Javanoramix(stock, cuiseur);
+        Druide javanoramix = new Javanoramix(stock, cuiseur, null);
 
         // Act + Assert
         assertThrows(IngrédientManquantException.class, () -> javanoramix.préparer(RECETTE_DES_FRAIFLES));
@@ -215,7 +216,7 @@ public class JavanoramixTest {
             ))
         );
         AppareilDeCuisson cuiseur = new CuiseurDouble();
-        Druide javanoramix = new Javanoramix(stock, cuiseur);
+        Druide javanoramix = new Javanoramix(stock, cuiseur, null);
 
         // Act + Assert
         assertThrows(IngrédientManquantException.class, () -> javanoramix.préparer(RECETTE_DES_FRAIFLES));
@@ -232,7 +233,8 @@ public class JavanoramixTest {
                 ))
         );
         AppareilDeCuisson cuiseur = new CuiseurDouble();
-        Druide javanoramix = new Javanoramix(stock, cuiseur);
+        NotificateurSpy notificateur = new NotificateurSpy();
+        Druide javanoramix = new Javanoramix(stock, cuiseur, notificateur);
 
         Plat platAttendu = new Plat("fraifle", 20);
 
@@ -255,7 +257,8 @@ public class JavanoramixTest {
                 ))
         );
         AppareilDeCuisson cuiseur = new CuiseurDouble();
-        Druide javanoramix = new Javanoramix(stock, cuiseur);
+        NotificateurSpy notificateur = new NotificateurSpy();
+        Druide javanoramix = new Javanoramix(stock, cuiseur, notificateur);
 
         Plat platAttendu = new Plat("fraifle au gui", 21);
 
@@ -280,7 +283,8 @@ public class JavanoramixTest {
                 ))
         );
         AppareilDeCuisson cuiseur = new CuiseurDouble();
-        Druide javanoramix = new Javanoramix(stock, cuiseur);
+        NotificateurSpy notificateur = new NotificateurSpy();
+        Druide javanoramix = new Javanoramix(stock, cuiseur, notificateur);
 
         Plat platAttendu = new Plat("fraifle au gui et lait doré", 35);
 
@@ -300,7 +304,8 @@ public class JavanoramixTest {
                 ))
         );
         CuiseurDouble cuiseur = new CuiseurDouble();
-        Druide javanoramix = new Javanoramix(stock, cuiseur);
+        NotificateurSpy notificateur = new NotificateurSpy();
+        Druide javanoramix = new Javanoramix(stock, cuiseur, notificateur);
 
         Plat platAttendu = new Plat("fraise bouillie", 12);
 
@@ -323,8 +328,8 @@ public class JavanoramixTest {
                 ))
         );
         CuiseurDouble cuiseur = new CuiseurDouble();
-        Druide javanoramix = new Javanoramix(stock, cuiseur);
-
+        NotificateurSpy notificateur = new NotificateurSpy();
+        Druide javanoramix = new Javanoramix(stock, cuiseur, notificateur);
         Plat platAttendu = new Plat("fraifle bouillie", 20);
 
         // Act
@@ -347,7 +352,7 @@ public class JavanoramixTest {
                 ))
         );
         AppareilDeCuisson cuiseur = new CuiseurDouble();
-        Druide javanoramix = new Javanoramix(stock, cuiseur);
+        Druide javanoramix = new Javanoramix(stock, cuiseur, null);
 
         // Act + Assert
         assertThrows(IngrédientManquantException.class, () -> javanoramix.préparer(RECETTE_DES_FRAIFLES_AU_GUI_PAS_ASSEZ_DE_FRAIFLES));
@@ -366,7 +371,8 @@ public class JavanoramixTest {
                 ))
         );
         CuiseurDouble cuiseur = new CuiseurDouble();
-        Druide javanoramix = new Javanoramix(stock, cuiseur);
+        NotificateurSpy notificateur = new NotificateurSpy();
+        Druide javanoramix = new Javanoramix(stock, cuiseur, notificateur);
 
         Plat platAttendu = new Plat("potion magique", 35);
 
@@ -377,5 +383,6 @@ public class JavanoramixTest {
         assertEquals(platAttendu, platObtenu);
         assertEquals(0, stock.getContenu().size());
         assertEquals(Ingrédient.INGRÉDIENT_VIDE, cuiseur.getIngrédientEnCuisson());
+        assertEquals(1, notificateur.getCallCount());
     }
 }
